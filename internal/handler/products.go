@@ -187,6 +187,16 @@ func DeleteProductById(c *gin.Context) {
 	}
 
 	res, err := database.Products.DeleteOne(c, bson.M{"_id": _id})
+
+	if err != nil {
+		// Handle the error
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  false,
+			"message": "Internal server error",
+		})
+		return
+	}
+
 	if res.DeletedCount == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  false,
